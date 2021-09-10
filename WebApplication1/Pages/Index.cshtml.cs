@@ -55,14 +55,14 @@
             //////////////////////////////////////////
             /// Shared Access Signature (SAS) Authentication
             /// 
-            var sasURL = "https://gratefullazurestorage.blob.core.windows.net/gratefull-taughts?sp=racwdl&st=2021-09-10T09:38:48Z&se=2021-09-10T17:38:48Z&spr=https&sv=2020-08-04&sr=c&sig=UzhaShsBPdB75%2Bc4TTcpU%2BPP8tb8mLAhuYb8sGZDVMY%3D";
-            UriBuilder sasUri = new UriBuilder(sasURL);
-            BlobServiceClient blobServiceClient = new BlobServiceClient(sasUri.Uri);
+            ////var sasURL = "https://gratefullazurestorage.blob.core.windows.net/gratefull-taughts?sp=racwdl&st=2021-09-10T09:38:48Z&se=2021-09-10T17:38:48Z&spr=https&sv=2020-08-04&sr=c&sig=UzhaShsBPdB75%2Bc4TTcpU%2BPP8tb8mLAhuYb8sGZDVMY%3D";
+            ////UriBuilder sasUri = new UriBuilder(sasURL);
+            ////BlobServiceClient blobServiceClient = new BlobServiceClient(sasUri.Uri);
 
             /// Connect using Managed Identity for Azure Resources
-            ////var credential = new DefaultAzureCredential();
-            ////Uri serviceUri = new Uri("https://gratefullazurestorage.blob.core.windows.net/");
-            ////BlobServiceClient blobServiceClient = new BlobServiceClient(serviceUri, credential);
+            var credential = new DefaultAzureCredential();
+            Uri serviceUri = new Uri("https://gratefullazurestorage.blob.core.windows.net/");
+            BlobServiceClient blobServiceClient = new BlobServiceClient(serviceUri, credential);
 
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
