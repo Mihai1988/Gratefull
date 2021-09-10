@@ -7,10 +7,12 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Logging;
 
     using System;
     using System.Collections.Generic;
+    using System.Data.SqlClient;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -19,6 +21,7 @@
     {
         private readonly ILogger<IndexModel> _logger;
         public string Message { get; set; }
+        public string ValueFromDb { get; set; }
 
         public IndexModel(ILogger<IndexModel> logger)
         {
@@ -30,6 +33,49 @@
             ////Uri serviceUri = new Uri("https://gratefullazurestorage.blob.core.windows.net/");
             ////var credential = new DefaultAzureCredential();
             ////BlobServiceClient blobServiceClient = new BlobServiceClient(serviceUri, credential);
+            this.Get();
+        }
+
+        public List<string> Get()
+        {
+            //var connectingString = "Server=tcp:azuresqlmsidemosrv.database.windows.net,1433;Initial Catalog=MSIDEMO;Persist Security Info=False" +
+            //    ";User ID=rezaadmin;Password=MySecurePass!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            var connectingString = "Server=tcp:gratefullserver.database.windows.net,1433;Initial Catalog=gratefulldb;Persist Security Info=False" +
+                ";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            var capitals = new List<string>();
+
+            try
+            {
+                using (var sqlConnection = new SqlConnection(connectingString))
+                {
+                    var sqlCommand = new SqlCommand("SELECT test FROM testTable", sqlConnection);
+
+                    var accessToken = (new AzureServiceTokenProvider()).GetAccessTokenAsync("https://database.windows.net/").Result;
+                    sqlConnection.AccessToken = accessToken;
+
+                    sqlConnection.Open();
+
+                    var reader = sqlCommand.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        capitals.Add(reader["test"].ToString());
+                        ValueFromDb = reader["test"].ToString();
+                    }
+
+                    sqlConnection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                capitals.Add(ex.Message);
+            }
+
+
+
+            return capitals;
         }
 
         [HttpPost]
