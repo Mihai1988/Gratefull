@@ -12,11 +12,11 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Production",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation"
       }
     },
-    "WebApplication1": {
+    "GratefullWebApp": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
